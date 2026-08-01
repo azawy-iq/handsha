@@ -1,111 +1,181 @@
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'upload_screen.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class MainHomeScreen extends StatefulWidget {
+  const MainHomeScreen({Key? key}) : super(key: key);
 
-  final List<Map<String, String>> categories = const [
-    {'title': 'ديكورات جبسنبورد', 'count': '120 تصميم', 'icon': 'dashboard'},
-    {'title': 'واجهات خارجية', 'count': '85 تصميم', 'icon': 'home'},
-    {'title': 'إضاءات وسقوف', 'count': '95 تصميم', 'icon': 'light'},
-    {'title': 'بديل الخشب والرخام', 'count': '150 تصميم', 'icon': 'view_quilt'},
-  ];
+  @override
+  State<MainHomeScreen> createState() => _MainHomeScreenState();
+}
+
+class _MainHomeScreenState extends State<MainHomeScreen> {
+  int _selectedIndex = 0;
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: const Color(0xFF1B1B1B), // خلفية داكنة مثل التصميم
+      extendBody: true,
+
+      // ─── الشريط العلوي (Header) ───
       appBar: AppBar(
-        title: const Text('هندسها - الديكورات', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
-        backgroundColor: Colors.black.withOpacity(0.7),
+        backgroundColor: Colors.transparent,
         elevation: 0,
-        centerTitle: true,
-      ),
-      body: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'أقسام الديكور',
-              style: TextStyle(fontSize: 22, fontWeight: FontWeight.bold, color: Colors.white),
+        title: const Text(
+          'عزاوي',
+          style: TextStyle(
+            fontFamily: 'Tajawal',
+            fontWeight: FontWeight.bold,
+            color: Colors.white,
+            fontSize: 22,
+          ),
+        ),
+        actions: [
+          Container(
+            margin: const EdgeInsets.only(left: 16),
+            decoration: const BoxDecoration(
+              color: Color(0xFFE65100), // الزر البرتقالي العلوي
+              shape: BoxShape.circle,
             ),
-            const SizedBox(height: 16),
-            Expanded(
-              child: GridView.builder(
-                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                  crossAxisCount: 2,
-                  crossAxisSpacing: 14,
-                  mainAxisSpacing: 14,
-                  childAspectRatio: 0.9,
-                ),
-                itemCount: categories.length,
-                itemBuilder: (context, index) {
-                  final cat = categories[index];
-                  return GlassContainer(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        const Icon(Icons.architecture_rounded, size: 46, color: Colors.white),
-                        const SizedBox(height: 12),
-                        Text(
-                          cat['title']!,
-                          textAlign: TextAlign.center,
-                          style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16, color: Colors.white),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          cat['count']!,
-                          style: const TextStyle(color: Colors.white60, fontSize: 12),
-                        ),
-                      ],
+            child: IconButton(
+              icon: const Icon(Icons.bookmark, color: Colors.white, size: 20),
+              onPressed: () {},
+            ),
+          )
+        ],
+      ),
+
+      // ─── محتوى الصفحة واللوجو ───
+      body: SingleChildScrollView(
+        padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
+        child: Column(
+          children: [
+            const SizedBox(height: 20),
+            
+            // كارت لوجو "هندسها للديكور الحديث"
+            Container(
+              width: double.infinity,
+              padding: const EdgeInsets.all(30),
+              decoration: BoxDecoration(
+                color: const Color(0xFF262626),
+                borderRadius: BorderRadius.circular(24),
+                border: Border.all(color: Colors.white10),
+              ),
+              child: Column(
+                children: [
+                  // أيقونة الأريكة والإضاءة (لوجو هندسها)
+                  const Icon(
+                    Icons.weekend_outlined, 
+                    size: 90, 
+                    color: Color(0xFFBCAAA4),
+                  ),
+                  const SizedBox(height: 16),
+                  
+                  // اسم المتجر بالخط الكبيرة
+                  const Text(
+                    'هندسها',
+                    style: TextStyle(
+                      fontSize: 38,
+                      fontWeight: FontWeight.w900,
+                      color: Color(0xFFD7CCC8),
+                      letterSpacing: 3,
                     ),
-                  );
-                },
+                  ),
+                  
+                  // الوصف السفي
+                  const Text(
+                    'لـ لـ د يـ كـ و ر  ا لـ حـ د يـ ث',
+                    style: TextStyle(
+                      fontSize: 13,
+                      color: Colors.white54,
+                      fontWeight: FontWeight.bold,
+                    ),
+                  ),
+                ],
               ),
             ),
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton.extended(
-        onPressed: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => const UploadScreen()),
-          );
-        },
-        backgroundColor: Colors.white,
-        icon: const Icon(Icons.add_a_photo, color: Colors.black),
-        label: const Text(
-          'رفع تصميم',
-          style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold),
+
+      // ─── شريط التنقل الزجاجي العائم (Bottom Bar) ───
+      bottomNavigationBar: Container(
+        margin: const EdgeInsets.all(20),
+        height: 70,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(35),
+          child: BackdropFilter(
+            filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 10),
+              decoration: BoxDecoration(
+                color: Colors.white.withOpacity(0.12),
+                borderRadius: BorderRadius.circular(35),
+                border: Border.all(color: Colors.white.withOpacity(0.2)),
+              ),
+              child: Row(
+                mainAxisAlignment: MainAxisAlignment.spaceAround,
+                children: [
+                  _buildNavItem(Icons.home_rounded, 0),
+                  _buildNavItem(Icons.menu_book_rounded, 1),
+                  
+                  // زر + البرتقالي العائم في المنتصف
+                  GestureDetector(
+                    onTap: () {},
+                    child: Container(
+                      width: 50,
+                      height: 50,
+                      decoration: const BoxDecoration(
+                        color: Color(0xFFFF5722),
+                        shape: BoxShape.circle,
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black38,
+                            blurRadius: 10,
+                            offset: Offset(0, 4),
+                          )
+                        ],
+                      ),
+                      child: const Icon(Icons.add, color: Colors.white, size: 30),
+                    ),
+                  ),
+
+                  _buildNavItem(Icons.notifications_none_rounded, 2, badgeCount: 1),
+                  _buildNavItem(Icons.search_rounded, 3),
+                ],
+              ),
+            ),
+          ),
         ),
       ),
     );
   }
-}
 
-// Glassmorphism Widget Component
-class GlassContainer extends StatelessWidget {
-  final Widget child;
-  const GlassContainer({super.key, required this.child});
-
-  @override
-  Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(20),
-      child: BackdropFilter(
-        filter: ImageFilter.blur(sigmaX: 15, sigmaY: 15),
-        child: Container(
-          padding: const EdgeInsets.all(16),
-          decoration: BoxDecoration(
-            color: Colors.white.withOpacity(0.08),
-            borderRadius: BorderRadius.circular(20),
-            border: Border.all(color: Colors.white.withOpacity(0.18), width: 1.5),
+  Widget _buildNavItem(IconData icon, int index, {int badgeCount = 0}) {
+    final isSelected = _selectedIndex == index;
+    return GestureDetector(
+      onTap: () => setState(() => _selectedIndex = index),
+      child: Stack(
+        alignment: Alignment.topRight,
+        children: [
+          Icon(
+            icon,
+            size: 28,
+            color: isSelected ? Colors.white : Colors.white54,
           ),
-          child: child,
-        ),
+          if (badgeCount > 0)
+            Container(
+              padding: const EdgeInsets.all(4),
+              decoration: const BoxDecoration(
+                color: Color(0xFFFF5722),
+                shape: BoxShape.circle,
+              ),
+              child: Text(
+                '$badgeCount',
+                style: const TextStyle(color: Colors.white, fontSize: 10, fontWeight: FontWeight.bold),
+              ),
+            )
+        ],
       ),
     );
   }
