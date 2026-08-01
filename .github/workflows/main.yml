@@ -28,15 +28,16 @@ jobs:
       - name: Install Dependencies
         run: flutter pub get
 
-      - name: Build iOS Framework / App (No Codesign)
-        run: |
-          flutter build ios --release --no-codesign CODE_SIGNING_ALLOWED=NO CODE_SIGNING_REQUIRED=NO CODE_SIGN_IDENTITY=""
+      - name: Build iOS Application (No Codesign)
+        run: flutter build ios --release --no-codesign
 
       - name: Package into IPA
         run: |
+          cd build/ios/iphoneos
           mkdir -p Payload
-          mv build/ios/iphoneos/Runner.app Payload/
+          mv Runner.app Payload/
           zip -r Handasaha.ipa Payload
+          mv Handasaha.ipa ../../../
 
       - name: Upload IPA Artifact
         uses: actions/upload-artifact@v4
